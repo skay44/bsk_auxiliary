@@ -1,7 +1,7 @@
 # bsk_auxiliary
 Part of a simple uni project, creates public and private key pair.
 
-### building a project
+### Building a project:
 Using PyCharm is recommended. 
 
 ### Dependencies:
