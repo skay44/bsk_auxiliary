@@ -7,3 +7,6 @@ Using PyCharm is recommended.
 ### Dependencies:
 pip install cryptography==39.0.1 
 sudo apt install python3-tk 
+
+### Link to the auxiliary application
+https://github.com/skay44/bsk_main
