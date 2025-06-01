@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PDF tester auxiliary: Plik źródłowy main.py</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">PDF tester auxiliary<span id="projectnumber">&#160;1.1</span>
+   </div>
+   <div id="projectbrief">Generator kluczy RSA z szyfrowaniem klucza prywatnego przy użyciu PIN-u.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano za pomocą Doxygen 1.14.0 -->
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',false,false,'search.php','Szukaj',false);
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle"><div class="title">main.py</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="main_8py.html">Idź do dokumentacji tego pliku.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno"><a class="line" href="namespacemain.html">    1</a></span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="keyword">from</span> tkinter <span class="keyword">import</span> filedialog, messagebox</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">from</span> cryptography.hazmat.primitives.asymmetric <span class="keyword">import</span> rsa</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">from</span> cryptography.hazmat.primitives <span class="keyword">import</span> serialization, hashes</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">from</span> cryptography.hazmat.primitives.kdf.pbkdf2 <span class="keyword">import</span> PBKDF2HMAC</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">from</span> cryptography.hazmat.primitives.ciphers <span class="keyword">import</span> Cipher, algorithms, modes</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">import</span> os</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">import</span> secrets</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span></div>
+<div class="foldopen" id="foldopen00016" data-start="" data-end="">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespacemain.html#ab9fac8bcd3953588027be1ececc5d5ca">   16</a></span><span class="keyword">def </span><a class="code hl_function" href="namespacemain.html#ab9fac8bcd3953588027be1ececc5d5ca">generate_keys</a>(pin, save_path):</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment"># generowanie klucza RSA, 65537 &lt;- liczba pierwsza,</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment"># 2^n + 1: 3, 5, 17, 257, 65537</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    priv_key = rsa.generate_private_key(public_exponent=65537, key_size=4096)</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    pub_key = priv_key.public_key()</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment"># klicz AES z pinu</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="comment">#wartosc losowa</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    random_number = secrets.token_bytes(16)</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment"># tworzymy instancje klasy PBKDF2HMAC z wykrozystanie soli</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=random_number, iterations=100000)</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    aes_key = kdf.derive(pin.encode())</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment"># serialiozacja klucza prywatnego do formatu PEM</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    priv_key_serialised = priv_key.private_bytes(</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        encoding=serialization.Encoding.PEM,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        format=serialization.PrivateFormat.PKCS8,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        encryption_algorithm=serialization.NoEncryption()</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    )</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="comment">#szyfrowanie klucza prywatnego</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    iv = secrets.token_bytes(16)</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    cipher = Cipher(algorithms.AES(aes_key), modes.CFB(iv))</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    encryptor = cipher.encryptor()</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    encrypted_priv = encryptor.update(priv_key_serialised) + encryptor.finalize()</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">#zapisanie klucza prywatnego</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">with</span> open(os.path.join(save_path, <span class="stringliteral">&quot;private_encrypted.bin&quot;</span>), <span class="stringliteral">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        f.write(random_number + iv + encrypted_priv)</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="comment"># serialiozacja klucza publicznego do formatu PEM</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    public_bytes = pub_key.public_bytes(</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        encoding=serialization.Encoding.PEM,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        format=serialization.PublicFormat.SubjectPublicKeyInfo</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    )</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment"># zapisanie publicznego</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">with</span> open(os.path.join(save_path, <span class="stringliteral">&quot;public.pem&quot;</span>), <span class="stringliteral">&quot;wb&quot;</span>) <span class="keyword">as</span> f:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        f.write(public_bytes)</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    messagebox.showinfo(<span class="stringliteral">&quot;Sukces&quot;</span>, <span class="stringliteral">&quot;Klucze zapisane pomyślnie&quot;</span>)</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="foldopen" id="foldopen00060" data-start="" data-end="">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="namespacemain.html#a1a334c85559a4479f7d18c417a5ae7b1">   60</a></span><span class="keyword">def </span><a class="code hl_function" href="namespacemain.html#a1a334c85559a4479f7d18c417a5ae7b1">on_generate</a>():</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    pin = pin_entry.get()</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordflow">if</span> <span class="keywordflow">not</span> pin:</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        messagebox.showerror(<span class="stringliteral">&quot;Błąd&quot;</span>, <span class="stringliteral">&quot;Należy wprowadzić PIN&quot;</span>)</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">return</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    path = filedialog.askdirectory(title=<span class="stringliteral">&quot;Wybierz ścieżke do zapisu&quot;</span>)</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">if</span> path:</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <a class="code hl_function" href="namespacemain.html#ab9fac8bcd3953588027be1ececc5d5ca">generate_keys</a>(pin, path)</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="namespacemain.html#aa698d1260ba54f169d55a5630f0f0aa3">   70</a></span>root = tk.Tk()</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>root.title(<span class="stringliteral">&quot;Generator Kluczy RSA&quot;</span>)</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>root.geometry(<span class="stringliteral">&quot;320x115&quot;</span>)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="namespacemain.html#ac3359eeffdf9dd3e5f8b1cad9870744a">   74</a></span>tk.Label(root, text=<span class="stringliteral">&quot;dodaj pin: &quot;</span>).pack(pady=5)</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="namespacemain.html#a2ce0e336eb1103ca7a5b69d597018ac3">   75</a></span>pin_entry = tk.Entry(root, show=<span class="stringliteral">&quot;*&quot;</span>)</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>pin_entry.pack(pady=5)</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="namespacemain.html#a39291a4fdf86b1e30594d58742eaa565">   78</a></span>tk.Button(root, text=<span class="stringliteral">&quot;Generuj klucze&quot;</span>, command=on_generate).pack(pady=10)</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>root.mainloop()</div>
+<div class="ttc" id="anamespacemain_html_a1a334c85559a4479f7d18c417a5ae7b1"><div class="ttname"><a href="namespacemain.html#a1a334c85559a4479f7d18c417a5ae7b1">main.on_generate</a></div><div class="ttdeci">on_generate()</div><div class="ttdoc">Obsługuje zdarzenie kliknięcia przycisku &quot;Generuj klucze&quot;.</div><div class="ttdef"><b>Definicja</b> <a href="#l00060">main.py:60</a></div></div>
+<div class="ttc" id="anamespacemain_html_ab9fac8bcd3953588027be1ececc5d5ca"><div class="ttname"><a href="namespacemain.html#ab9fac8bcd3953588027be1ececc5d5ca">main.generate_keys</a></div><div class="ttdeci">generate_keys(pin, save_path)</div><div class="ttdoc">Generuje parę kluczy RSA i zapisuje je na dysku.</div><div class="ttdef"><b>Definicja</b> <a href="#l00016">main.py:16</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Wygenerowano za pomocą&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>
