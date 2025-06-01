@@ -1,15 +1,18 @@
-#gui
+## @file
+#  @brief Generator kluczy RSA z szyfrowaniem klucza prywatnego przy użyciu PIN-u.
 import tkinter as tk
 from tkinter import filedialog, messagebox
-#kryptografia
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import os
-#rng
 import secrets
 
+## @brief Generuje parę kluczy RSA i zapisuje je na dysku.
+#  @param pin PIN wprowadzony przez użytkownika.
+#  @param save_path Ścieżka do folderu gdzie zapisane zostaną klucze.
+#  @details Klucz prywatny jest szyfrowany algorytmem AES (CFB) z użyciem klucza pochodzącego z PBKDF2HMAC. Klucz publiczny jest zapisywany w formacie PEM.
 def generate_keys(pin, save_path):
     # generowanie klucza RSA, 65537 <- liczba pierwsza,
     # 2^n + 1: 3, 5, 17, 257, 65537
@@ -52,7 +55,8 @@ def generate_keys(pin, save_path):
 
     messagebox.showinfo("Sukces", "Klucze zapisane pomyślnie")
 
-
+## @brief Obsługuje zdarzenie kliknięcia przycisku "Generuj klucze".
+#  @details Weryfikuje wprowadzenie PIN-u, prosi użytkownika o wybór ścieżki i wywołuje funkcję `generate_keys`.
 def on_generate():
     pin = pin_entry.get()
     if not pin:
